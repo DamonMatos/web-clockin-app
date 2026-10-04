@@ -1,0 +1,69 @@
+<div class="clockin-container">
+    <div class="card-marcacion">
+
+        <!-- Encabezado de la Tarjeta -->
+        <div class="card-header">
+            <h2>Panel de Asistencia</h2>
+            <p class="subtitle">Registra tu jornada laboral de hoy</p>
+        </div>
+
+        <!-- Reloj Digital en Tiempo Real -->
+        <div class="reloj-box">
+            <span class="time">{{ horaActual }}</span>
+            <span class="date">{{ fechaActual }}</span>
+        </div>
+
+        <!-- Estado Actual del Empleado -->
+        <div class="estado-badge" [class.activo]="estaTrabajando">
+            <span class="dot"></span>
+            @if (estaTrabajando) {
+            <span>Estado: <strong>Dentro (Laborando)</strong></span>
+            } @else {
+            <span>Estado: <strong>Fuera del Turno</strong></span>
+            }
+        </div>
+
+            <form [formGroup]="fb" (ngSubmit)="registrar()" autocomplete="off">
+                <div class="acciones-grid">
+                    <input type="text" 
+                        placeholder="Ingrese su documento de identidad" 
+                        class="form-control" 
+                        maxlength="8"
+                        formControlName="documentoidentidad"
+                        onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                        />                    
+                </div>
+
+                <div class="acciones-grid">
+                    <button class="btn btn-entrada" [disabled]="fb.invalid">
+                        <span class="icon">🚀</span> Registrar Ingreso
+                    </button>
+                </div>
+                    
+                <!-- Mensajes de error en tiempo real -->
+                    @if (fb.get('documentoidentidad')?.touched && fb.get('documentoidentidad')?.invalid) {
+                        <div style="color: red;">
+                        El documento de identidad debe tener exactamente 8 dígitos.
+                        </div>
+                    }                
+            </form>
+
+        <!-- Acciones Secundarias (Almuerzo / Descanso) -->
+        <!-- <div class="acciones-secundarias">
+            <button class="btn-secundario" [disabled]="!estaTrabajando" (click)="registrar('Inicio Almuerzo')">
+                🥪 Almuerzo
+            </button>
+            <button class="btn-secundario" [disabled]="!estaTrabajando" (click)="registrar('Fin Almuerzo')">
+                🔄 Volver
+            </button>
+        </div> -->
+
+        <!-- Último Registro Realizado -->
+        @if (ultimoRegistro) {
+        <div class="historial-rapido">
+            <p>Último movimiento: <strong>{{ ultimoRegistro }}</strong></p>
+        </div>
+        }
+
+    </div>
+</div>
